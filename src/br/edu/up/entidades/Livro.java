@@ -9,6 +9,7 @@ public class Livro {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idLivro;
+	private String codigo;
 	private String titulo;
 	private String genero;
 	private String autor;
@@ -29,6 +30,12 @@ public class Livro {
 	}
 	public void setIdLivro(int idLivro) {
 		this.idLivro = idLivro;
+	}
+	public String getCodigo() {
+		return codigo;
+	}
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 	public String getTitulo() {
 		return titulo;

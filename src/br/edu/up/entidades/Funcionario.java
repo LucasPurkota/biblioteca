@@ -12,6 +12,7 @@ public class Funcionario{
 	private String cpf;
 	private String nome;
 	private String rg;
+	private String senha;
 	private String telefone;
 	private Date dataNascimento;
 	@OneToOne
@@ -42,6 +43,12 @@ public class Funcionario{
 	}
 	public void setRg(String rg) {
 		this.rg = rg;
+	}	
+	public String getSenha() {
+		return senha;
+	}
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 	public String getTelefone() {
 		return telefone;

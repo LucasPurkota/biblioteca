@@ -1,211 +1,200 @@
 package br.edu.up.front;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import br.edu.up.entidades.Endereco;
 import br.edu.up.entidades.Funcionario;
-import br.edu.up.negocio.FuncionarioNegocio;
-import br.edu.up.negocio.ValidaCPF;
-import br.edu.up.persistencia.EnderecoPersistencia;
-import br.edu.up.persistencia.FuncionarioPersistencia;
+import br.edu.up.presistencia.FuncionarioPersistencia;
+import br.edu.up.negocio.*;
+
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.util.Date;
+import java.awt.event.ActionEvent;
 
 public class AppFuncionario {
-	public AppFuncionario() {
-		int opcao = 0;
-		
-		do {
-			System.out.println("\n\n***Funcioanrio***");
-			System.out.println("\n1 - Incluir");
-			System.out.println("2 - Editar");
-			System.out.println("3 - Excluir");
-			System.out.println("4 - Localizar");
-			System.out.println("5 - Voltar");
-			opcao = Console.readInt("Informe a opção: ");
-			switch(opcao) {
-			case 1:
-				incluirFuncionario();
-				break;
-			case 2:
-				editarFuncionario();
-				break;
-			case 3:
-				excluirFuncionario();
-				break;
-			case 4:
-				localizarFuncionario();
-				break;
+
+	JFrame frame;
+	private JTextField txtCpf;
+	private JTextField txtRg;
+	private JTextField txtNascimento;
+	private JTextField txtNome;
+	private JTextField txtTelefone;
+	private JTextField txtSenha;
+	private JTextField txtCep;
+	private JTextField txtComplemento;
+	private JTextField txtNumero;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AppFuncionario window = new AppFuncionario();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-		}while(opcao != 5);
+		});
 	}
-	
-	private void incluirFuncionario() {
-		String dataNasc;
-		Date dataConvert;
-		Funcionario funcionario = new Funcionario();
-		System.out.println("\n\n***Incluir Funcionario***");
-		funcionario.setCpf(Console.readString("\nInforme o CPF:"));
-		if(ValidaCPF.isCPF(funcionario.getCpf())) {
-			if(FuncionarioPersistencia.procuraPorCPF(funcionario) == null) {
-				funcionario.setNome(Console.readString("Informe o nome: "));
-				funcionario.setRg(Console.readString("Informe o RG: "));
-				funcionario.setTelefone(Console.readString("Informe o telefone: "));
-				do {
-					dataNasc = Console.readString("Informe a data de nascimento: ");
-					dataConvert = FuncionarioNegocio.converterData(dataNasc);
-					if(dataConvert != null) {
-						funcionario.setDataNascimento(dataConvert);
-					}else {
-						System.out.println("Data invalida.");
-					}
-				}while(dataNasc == null);
+
+	/**
+	 * Create the application.
+	 */
+	public AppFuncionario() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 450, 311);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JLabel lblCpf = new JLabel("CPF");
+		lblCpf.setBounds(20, 20, 45, 15);
+		frame.getContentPane().add(lblCpf);
+		
+		txtCpf = new JTextField();
+		txtCpf.setBounds(20, 40, 100, 20);
+		frame.getContentPane().add(txtCpf);
+		txtCpf.setColumns(10);
+		
+		JLabel lblRg = new JLabel("RG");
+		lblRg.setBounds(130, 20, 45, 15);
+		frame.getContentPane().add(lblRg);
+		
+		txtRg = new JTextField();
+		txtRg.setBounds(130, 40, 100, 20);
+		frame.getContentPane().add(txtRg);
+		txtRg.setColumns(10);
+		
+		JLabel lblNascimento = new JLabel("Data Nascimento");
+		lblNascimento.setBounds(240, 20, 100, 15);
+		frame.getContentPane().add(lblNascimento);
+		
+		txtNascimento = new JTextField();
+		txtNascimento.setBounds(240, 40, 100, 20);
+		frame.getContentPane().add(txtNascimento);
+		txtNascimento.setColumns(10);
+		
+		JLabel lblNome = new JLabel("Nome");
+		lblNome.setBounds(20, 70, 45, 15);
+		frame.getContentPane().add(lblNome);
+		
+		txtNome = new JTextField();
+		txtNome.setBounds(20, 90, 320, 19);
+		frame.getContentPane().add(txtNome);
+		txtNome.setColumns(10);
+		
+		JLabel lblTelefone = new JLabel("Telefone");
+		lblTelefone.setBounds(20, 120, 60, 15);
+		frame.getContentPane().add(lblTelefone);
+		
+		txtTelefone = new JTextField();
+		txtTelefone.setBounds(20, 140, 150, 20);
+		frame.getContentPane().add(txtTelefone);
+		txtTelefone.setColumns(10);
+		
+		JLabel lblSenha = new JLabel("Senha");
+		lblSenha.setBounds(190, 119, 45, 15);
+		frame.getContentPane().add(lblSenha);
+		
+		txtSenha = new JTextField();
+		txtSenha.setBounds(190, 140, 150, 19);
+		frame.getContentPane().add(txtSenha);
+		txtSenha.setColumns(10);
+		
+		JLabel lblCep = new JLabel("CEP");
+		lblCep.setBounds(20, 170, 45, 15);
+		frame.getContentPane().add(lblCep);
+		
+		txtCep = new JTextField();
+		txtCep.setBounds(20, 190, 100, 20);
+		frame.getContentPane().add(txtCep);
+		txtCep.setColumns(10);
+		
+		JLabel lblComplemento = new JLabel("Complemento");
+		lblComplemento.setBounds(130, 170, 80, 15);
+		frame.getContentPane().add(lblComplemento);
+		
+		txtComplemento = new JTextField();
+		txtComplemento.setBounds(130, 190, 100, 20);
+		frame.getContentPane().add(txtComplemento);
+		txtComplemento.setColumns(10);
+		
+		JLabel lblNumero = new JLabel("Numero");
+		lblNumero.setBounds(240, 170, 45, 15);
+		frame.getContentPane().add(lblNumero);
+		
+		txtNumero = new JTextField();
+		txtNumero.setBounds(240, 190, 100, 20);
+		frame.getContentPane().add(txtNumero);
+		txtNumero.setColumns(10);
+		
+		JButton btnConfirmar = new JButton("Confirmar");
+		btnConfirmar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Date dataNascimento;
 				Endereco endereco = new Endereco();
-				endereco.setCep(Console.readString("Informe o CEP: "));
-				endereco = EnderecoPersistencia.pequisarPorCEP(endereco);
-				if(endereco != null) {
-					funcionario.setEndereco(endereco);
-					funcionario.setComplemento(Console.readString("Informe o complemento: "));
-					funcionario.setNumero(Console.readInt("Informe o número: "));
-					String resp = Console.readString("Deseja confirmar a operação? ");
-					if((resp.equals("S")) || (resp.equals("s"))) {
-						if(FuncionarioPersistencia.incluir(funcionario) == true) {
-							System.out.println("\nFuncionario cadastrado com sucesso!");
+				Funcionario funcionario = new Funcionario();
+				funcionario.setCpf(txtCpf.getText());
+				if(ValidaCPF.isCPF(funcionario.getCpf())) {
+					if(FuncionarioPersistencia.procuraPorCPF(funcionario) == null) {
+						funcionario.setRg(txtRg.getText());
+						funcionario.setNome(txtNome.getText());
+						dataNascimento = ConverteData.converterData(txtNascimento.getText());
+						if(dataNascimento != null) {
+							funcionario.setDataNascimento(dataNascimento);
+							funcionario.setTelefone(txtTelefone.getText());
+							funcionario.setSenha(txtSenha.getText());
+							endereco.setCep(txtCep.getText());
+							if(endereco != null) {
+								funcionario.setEndereco(endereco);
+								funcionario.setComplemento(txtComplemento.getText());
+								funcionario.setNumero(Integer.parseInt(txtNumero.getText()));
+								if(FuncionarioPersistencia.incluir(funcionario) == true) {
+									JOptionPane.showMessageDialog(null, "Dados Inseridos com Sucesso!");
+								}else {									
+									JOptionPane.showMessageDialog(null, "Dados não podem ser inseridos no momento!");
+								}
+							}else {
+								JOptionPane.showMessageDialog(null, "Endereço não cadastrado!");
+							}
 						}else {
-							System.out.println("\nFuncionario não pode ser incluso no momento!");
+							JOptionPane.showMessageDialog(null, "Data Invalida!");
 						}
 					}else {
-						System.out.println("\nFuncionario não pode ser incluso no momento!");
-					}					
-				}else {
-					System.out.println("\nEndereco não cadastrado!");
-				}
-			}else {
-				System.out.println("\nCliente já cadastrado!");
-			}
-		}else {
-			System.out.println("\nCPF invalido!");
-		}
-	}
-	
-	private void editarFuncionario() {
-		String dataNasc;
-		Date dataConvert;
-		Funcionario funcionario = new Funcionario();
-		SimpleDateFormat formato = new SimpleDateFormat("dd/mm/yyyy");
-		System.out.println("\n\n***Editar Funcionario***");
-		funcionario.setCpf(Console.readString("\nInforme o CPF do cliente que deseja editar: "));
-		funcionario = FuncionarioPersistencia.procuraPorCPF(funcionario);
-		if(funcionario != null) {
-			System.out.println("\n------------------");
-			System.out.println("ID: " + funcionario.getIdFuncionario());
-			System.out.println("CPF: " + funcionario.getCpf());
-			System.out.println("Nome: " + funcionario.getNome());
-			System.out.println("RG: " + funcionario.getRg());
-			System.out.println("Telefone: " + funcionario.getTelefone());
-			System.out.println("Data Nascimento: " + formato.format(funcionario.getDataNascimento()));
-			System.out.println("Endereço: " + funcionario.getEndereco().getCep());
-			System.out.println("Complemento: " + funcionario.getComplemento());
-			System.out.println("Numero: " + funcionario.getNumero());
-			System.out.println("------------------");
-			funcionario.setNome(Console.readString("\nInforme o nome: "));
-			funcionario.setTelefone(Console.readString("Informe o telefone"));
-			do {
-				dataNasc = Console.readString("Informe a data de nascimento: ");
-				dataConvert = FuncionarioNegocio.converterData(dataNasc);
-				if(dataConvert != null) {
-					funcionario.setDataNascimento(dataConvert);
-				}else {
-					System.out.println("Data invalida.");
-				}
-			}while(dataNasc == null);
-			Endereco endereco = new Endereco();
-			endereco.setCep(Console.readString("Informe o CEP: "));
-			endereco = EnderecoPersistencia.pequisarPorCEP(endereco);
-			if(endereco != null) {
-				funcionario.setEndereco(endereco);
-				funcionario.setComplemento(Console.readString("Informe o complemento: "));
-				funcionario.setNumero(Console.readInt("Informe o número: "));
-				String resp = Console.readString("Deseja confirmar a operação? ");
-				if((resp.equals("S")) || (resp.equals("s"))) {
-					if(FuncionarioPersistencia.editar(funcionario) == true) {
-						System.out.println("\nFuncionario editado com sucesso!");
-					}else {
-						System.out.println("\nFuncionarioa não pode ser editado no momento!");
+						JOptionPane.showMessageDialog(null, "Funcionario ja Cadastrado!");
 					}
 				}else {
-					System.out.println("\nFuncionarioa não pode ser editado no momento!");
+					JOptionPane.showMessageDialog(null, "CPF Invalido!");
 				}
-			}else {
-				System.out.println("\nEndereco não cadastrado!");
 			}
-		}else {
-			System.out.println("\nFuncionario não cadastrado!");
-		}
-	}
-	
-	private void excluirFuncionario() {
-		Funcionario funcionario = new Funcionario();
-		SimpleDateFormat formato = new SimpleDateFormat("dd/mm/yyyy");
-		System.out.println("\n\n***Excluir Funcionario***");
-		funcionario.setCpf(Console.readString("\nInforme o CPF do Funcionario que deseja excluir: "));
-		funcionario = FuncionarioPersistencia.procuraPorCPF(funcionario);
-		if(funcionario != null) {
-			System.out.println("\n---------------------");
-			System.out.println("ID: " + funcionario.getIdFuncionario());
-			System.out.println("CPF: " + funcionario.getCpf());
-			System.out.println("Nome: " + funcionario.getNome());
-			System.out.println("RG: " + funcionario.getRg());
-			System.out.println("Telefone: " + funcionario.getTelefone());
-			System.out.println("Data Nascimento: " + formato.format(funcionario.getDataNascimento()));
-			System.out.println("CEP: " + funcionario.getEndereco().getCep());
-			System.out.println("Logradouro: " + funcionario.getEndereco().getLogradouro());
-			System.out.println("Bairro: " + funcionario.getEndereco().getBairro());
-			System.out.println("Cidade: " + funcionario.getEndereco().getCidade());
-			System.out.println("Estado: " + funcionario.getEndereco().getEstado());
-			System.out.println("Pais: " + funcionario.getEndereco().getPais());
-			System.out.println("Complemento: " + funcionario.getComplemento());
-			System.out.println("Numero: " + funcionario.getNumero());
-			System.out.println("---------------------");
-			String resp = Console.readString("Deseja realmente excluir o Funcionario localizado? ");
-			if((resp.equals("S")) || (resp.equals("s"))) {
-				if(FuncionarioPersistencia.excluir(funcionario) == true) {
-					System.out.println("\nFuncionario excluido com sucesso!");
-				}else {
-					System.out.println("\nNão foi possivel excluir o Funcionario no momento!");
-				}
-			}else {
-				System.out.println("\nNão foi possivel excluir o Funcionario no momento!");
+		});
+		btnConfirmar.setBounds(20, 230, 100, 30);
+		frame.getContentPane().add(btnConfirmar);
+		
+		JButton btnVoltar = new JButton("Voltar");
+		btnVoltar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MenuPrincipal menuPrincipal = new MenuPrincipal();
+				menuPrincipal.frame.setVisible(true);
+				frame.setVisible(false);
 			}
-		}else {
-			System.out.println("\nFuncionario não cadastrado!");
-		}
-	}
-	
-	private void localizarFuncionario() {
-		Funcionario funcionario = new Funcionario();
-		SimpleDateFormat formato = new SimpleDateFormat("dd/mm/yyyy");
-		System.out.println("\n\n***Localizar Funcioanrio***");
-		funcionario.setCpf(Console.readString("\nInforme o CPF do Funcionario que deseja localizar: "));
-		funcionario = FuncionarioPersistencia.procuraPorCPF(funcionario);
-		if(funcionario != null) {
-			System.out.println("\n---------------------");
-			System.out.println("ID: " + funcionario.getIdFuncionario());
-			System.out.println("CPF: " + funcionario.getCpf());
-			System.out.println("Nome: " + funcionario.getNome());
-			System.out.println("RG: " + funcionario.getRg());
-			System.out.println("Telefone: " + funcionario.getTelefone());
-			System.out.println("Data Nascimento: " + formato.format(funcionario.getDataNascimento()));
-			System.out.println("CEP: " + funcionario.getEndereco().getCep());
-			System.out.println("Logradouro: " + funcionario.getEndereco().getLogradouro());
-			System.out.println("Bairro: " + funcionario.getEndereco().getBairro());
-			System.out.println("Cidade: " + funcionario.getEndereco().getCidade());
-			System.out.println("Estado: " + funcionario.getEndereco().getEstado());
-			System.out.println("Pais: " + funcionario.getEndereco().getPais());
-			System.out.println("Complemento: " + funcionario.getComplemento());
-			System.out.println("Numero: " + funcionario.getNumero());
-			System.out.println("---------------------");
-		}else {
-			System.out.println("\nFuncionario não cadastrado!");
-		}
+		});
+		btnVoltar.setBounds(130, 230, 100, 30);
+		frame.getContentPane().add(btnVoltar);
 	}
 }

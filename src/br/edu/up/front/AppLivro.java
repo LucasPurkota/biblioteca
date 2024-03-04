@@ -1,183 +1,179 @@
 package br.edu.up.front;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.JTree;
 
 import br.edu.up.entidades.Livro;
-import br.edu.up.negocio.LivroNegocio;
-import br.edu.up.persistencia.LivroPersistencia;
+
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JRadioButton;
+import javax.swing.JCheckBox;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 public class AppLivro {
+
+	JFrame frame;
+	private JTextField txtTitulo;
+	private JTextField txtAutor;
+	private JTextField txtLancamento;
+	private JTextField txtEditora;
+	private JTextField txtGenero;
+	private JTextField textField;
+	private JTextField txtCodigo;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AppLivro window = new AppLivro();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
 	public AppLivro() {
-		int opcao = 0;
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame =  
+				new JFrame();
+		frame.setBounds(100, 100, 470, 290);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
 		
-		do {
-			System.out.println("\n\n***Livro***");
-			System.out.println("\n1 - Incluir");
-			System.out.println("2 - Editar");
-			System.out.println("3 - Excluir");
-			System.out.println("4 - Localizar");
-			System.out.println("5 - Voltar");
-			opcao = Console.readInt("Informe a opção: ");
-			
-			switch(opcao) {
-			case 1:
-				incluirLivro();
-				break;
-			case 2:
-				editarLivro();
-				break;
-			case 3:
-				excluirLivro();
-				break;
-			case 4:
-				localizarLivro();
-				break;
+		JLabel lblTitulo = new JLabel("Titulo");
+		lblTitulo.setBounds(120, 70, 45, 15);
+		frame.getContentPane().add(lblTitulo);
+		
+		txtTitulo = new JTextField();
+		txtTitulo.setBounds(120, 90, 210, 20);
+		frame.getContentPane().add(txtTitulo);
+		txtTitulo.setColumns(10);
+
+		JLabel lblGenero = new JLabel("Genero");
+		lblGenero.setBounds(340, 70, 45, 15);
+		frame.getContentPane().add(lblGenero);
+		
+		txtGenero = new JTextField();
+		txtGenero.setBounds(340, 90, 100, 20);
+		frame.getContentPane().add(txtGenero);
+		txtGenero.setColumns(10);
+		
+		JLabel lblAutor = new JLabel("Autor");
+		lblAutor.setBounds(285, 120, 45, 15);
+		frame.getContentPane().add(lblAutor);
+		
+		txtAutor = new JTextField();
+		txtAutor.setBounds(285, 140, 155, 20);
+		frame.getContentPane().add(txtAutor);
+		txtAutor.setColumns(10);
+		
+		JLabel lblLancamento = new JLabel("Lançamento");
+		lblLancamento.setBounds(230, 20, 80, 15);
+		frame.getContentPane().add(lblLancamento);
+		
+		txtLancamento = new JTextField();
+		txtLancamento.setBounds(230, 40, 100, 20);
+		frame.getContentPane().add(txtLancamento);
+		txtLancamento.setColumns(10);
+		
+		JLabel lblEditora = new JLabel("Editora");
+		lblEditora.setBounds(120, 120, 45, 15);
+		frame.getContentPane().add(lblEditora);
+		
+
+		txtEditora = new JTextField();
+		txtEditora.setBounds(120, 140, 155, 20);
+		frame.getContentPane().add(txtEditora);
+		txtEditora.setColumns(10);
+		
+		JLabel lblStatus = new JLabel("Status");
+		lblStatus.setBounds(340, 20, 45, 13);
+		frame.getContentPane().add(lblStatus);
+		
+		JButton btnIncluir = new JButton("Incluir");
+		btnIncluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Livro livro = new Livro();
+				livro.setCodigo(txtCodigo.getText());
+				livro.setTitulo(txtTitulo.getText());
+				livro.setAutor(txtAutor.getText());
+				livro.setEditora(txtEditora.getText());
+				livro.setGenero(txtGenero.getText());
+				livro.setEmprestado(false);
+				JOptionPane.showMessageDialog(null, "Dados Inseridos com Sucesso!");
 			}
-		}while(opcao != 5);
-	}
-	
-	private void incluirLivro() {
-		String dataLanc;
-		Date dataConvert;
-		Livro livro = new Livro(false);
-		System.out.println("\n\n***Incluir Livro***");
-		livro.setTitulo(Console.readString("\nInforme o titulo: "));
-		if(LivroPersistencia.procurarPorTitulo(livro) == null) {
-			livro.setGenero(Console.readString("Informe o genero: "));
-			livro.setAutor(Console.readString("Informe o autor: "));
-			livro.setEditora(Console.readString("Informe a editora: "));
-			do {
-				dataLanc = Console.readString("Informe a data do lançamento: ");
-				dataConvert = LivroNegocio.converterData(dataLanc);
-				if(dataConvert != null) {
-					livro.setLancamento(dataConvert);
-				}else {
-					System.out.println("Data invalida!");
-				}
-			}while(dataConvert == null);
-			String resp = Console.readString("Deseja confirmar a operação? ");
-			if((resp.equals("S")) || (resp.equals("s"))) {
-				if(LivroPersistencia.incluir(livro) == true) {
-					System.out.println("\nLivro cadastrado com sucesso!");
-				}else {
-					System.out.println("\nLivro não pode ser incluso no momento!");
-				}
-			}else {
-				System.out.println("\nLivro não pode ser incluso no momento!");
+		});
+		btnIncluir.setBounds(10, 50, 80, 20);
+		frame.getContentPane().add(btnIncluir);
+		
+		JButton btnVoltar = new JButton("Voltar");
+		btnVoltar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MenuPrincipal menuPrincipal = new MenuPrincipal();
+				menuPrincipal.frame.setVisible(true);
+				frame.setVisible(false);
 			}
-		}else {
-			System.out.println("\nLivro já cadastrado");
-		}
-	}
-	
-	private void editarLivro() {
-		String dataLanc;
-		Date dataConvert;
-		Livro livro = new Livro();
-		SimpleDateFormat formato = new SimpleDateFormat("dd/mm/yyyy");
-		System.out.println("\n\n***Editar Livro***");
-		livro.setIdLivro(Console.readInt("\nInforme o ID do Livro que deseja editar: "));
-		livro = LivroPersistencia.procurarPorID(livro);
-		if(livro != null) {
-			System.out.println("\n-------------------");
-			System.out.println("ID: " + livro.getIdLivro());
-			System.out.println("Titulo: " + livro.getTitulo());
-			System.out.println("Genero: " + livro.getGenero());
-			System.out.println("Autor: " + livro.getAutor());
-			System.out.println("Editora: " + livro.getEditora());
-			System.out.println("Data Lançamento: " + formato.format(livro.getLancamento()));
-			if(livro.getEmprestado() == true) {
-				System.out.println("Situação: Emprestado");
-			}else {
-				System.out.println("Situação: Biblioteca");
-			}
-			System.out.println("-------------------");
-			livro.setTitulo(Console.readString("\nInforme o titulo: "));
-			livro.setGenero(Console.readString("Informe o genero: "));
-			livro.setAutor(Console.readString("Informe o autor: "));
-			livro.setEditora(Console.readString("Informe a editora: "));
-			do {
-				dataLanc = Console.readString("Informe a data do lançamento: ");
-				dataConvert = LivroNegocio.converterData(dataLanc);
-				if(dataConvert != null) {
-					livro.setLancamento(dataConvert);
-				}else {
-					System.out.println("Data invalida!");
-				}
-			}while(dataConvert == null);
-			String resp = Console.readString("Deseja confirmar a operação? ");
-			if((resp.equals("S")) || (resp.equals("s"))) {
-				if(LivroPersistencia.editar(livro) == true) {
-					System.out.println("\nLivro editado com sucesso!");
-				}else {
-					System.out.println("\nLivro não pode ser editado no momento!");
-				}
-			}else {
-				System.out.println("\nLivro não pode ser editado no momento!");
-			}			
-		}else {
-			System.out.println("\nLivro não cadastrado!");
-		}
-	}
-	
-	private void excluirLivro() {
-		Livro livro = new Livro();
-		SimpleDateFormat formato = new SimpleDateFormat("dd/mm/yyyy");
-		System.out.println("\n\n***Excluir Livro***");
-		livro.setIdLivro(Console.readInt("\nInforme o ID do produto que deseja excluir: "));
-		livro = LivroPersistencia.procurarPorID(livro);
-		if(livro != null) {
-			System.out.println("\n-------------------");
-			System.out.println("ID: " + livro.getIdLivro());
-			System.out.println("Titulo: " + livro.getTitulo());
-			System.out.println("Genero: " + livro.getGenero());
-			System.out.println("Autor: " + livro.getAutor());
-			System.out.println("Editora: " + livro.getEditora());
-			System.out.println("Data Lançamento: " + formato.format(livro.getLancamento()));
-			if(livro.getEmprestado() == true) {
-				System.out.println("Situação: Emprestado");
-			}else {
-				System.out.println("Situação: Biblioteca");
-			}
-			System.out.println("-------------------");
-			String resp = Console.readString("Deseja realmente excluir o Livro localizado? ");
-			if((resp.equals("S")) || (resp.equals("s"))){
-				if(LivroPersistencia.excluir(livro) == true) {
-					System.out.println("\nLivro excluido com sucesso!");
-				}else {
-					System.out.println("\nNão foi possivel excluir o Livro no momento!");
-				}
-			}else {
-				System.out.println("\nNão foi possivel excluir o Livro no momento!");
-			}
-		}else {
-			System.out.println("\nLivro não cadastrado!");
-		}
-	}
-	
-	private void localizarLivro() {
-		Livro livro = new Livro();
-		SimpleDateFormat formato = new SimpleDateFormat("dd/mm/yyyy");
-		System.out.println("\n\n***Localizar Livro***");
-		livro.setIdLivro(Console.readInt("\nInforme o ID do produto que deseja localizar: "));
-		livro = LivroPersistencia.procurarPorID(livro);
-		if(livro != null) {
-			System.out.println("\n-------------------");
-			System.out.println("ID: " + livro.getIdLivro());
-			System.out.println("Titulo: " + livro.getTitulo());
-			System.out.println("Genero: " + livro.getGenero());
-			System.out.println("Autor: " + livro.getAutor());
-			System.out.println("Editora: " + livro.getEditora());
-			System.out.println("Data Lançamento: " + formato.format(livro.getLancamento()));
-			if(livro.getEmprestado() == true) {
-				System.out.println("Situação: Emprestado");
-			}else {
-				System.out.println("Situação: Biblioteca");
-			}
-			System.out.println("-------------------");
-		}else {
-			System.out.println("\nLivro não cadastrado!");
-		}
+		});
+		btnVoltar.setBounds(10, 20, 80, 20);
+		frame.getContentPane().add(btnVoltar);
+		
+		textField = new JTextField();
+		textField.setEnabled(false);
+		textField.setBounds(340, 40, 100, 20);
+		frame.getContentPane().add(textField);
+		textField.setColumns(10);
+		
+		JLabel lblCodgio = new JLabel("Codigo");
+		lblCodgio.setBounds(120, 20, 45, 15);
+		frame.getContentPane().add(lblCodgio);
+		
+		txtCodigo = new JTextField();
+		txtCodigo.setBounds(120, 40, 100, 20);
+		frame.getContentPane().add(txtCodigo);
+		txtCodigo.setColumns(10);
+		
+		JButton btnFiltrar = new JButton("Filtrar");
+		btnFiltrar.setBounds(10, 140, 80, 20);
+		frame.getContentPane().add(btnFiltrar);
+		
+		JButton btnEditar = new JButton("Editar");
+		btnEditar.setBounds(10, 80, 80, 20);
+		frame.getContentPane().add(btnEditar);
+		
+		JButton btnExcluir = new JButton("Excluir");
+		btnExcluir.setBounds(10, 110, 80, 20);
+		frame.getContentPane().add(btnExcluir);
+		
+		JSeparator separator = new JSeparator();
+		separator.setOrientation(SwingConstants.VERTICAL);
+		separator.setBounds(100, 0, 2, 290);
+		frame.getContentPane().add(separator);
+		
+		JCheckBox chckbxInativarItem = new JCheckBox("Inativo");
+		chckbxInativarItem.setBounds(120, 170, 100, 20);
+		frame.getContentPane().add(chckbxInativarItem);
 	}
 }
