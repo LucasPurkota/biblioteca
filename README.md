@@ -13,6 +13,8 @@
   Uma Biblioteca necessita de um controle de emprestimo de seus livros para saber sempre o que tem ou não tem em sua biblioteca e para qual cliente foi emprestado se houve ou não a devolução e no caso de algum dano em algum livro tenha este registro para saber qual cliente deve ser cobrado pela perca do livro ou ate mesmo de um dano.
   
   Pensando nesse questão tive o intuito de desenvolver o seguinte projeto para que haja este controle nas bibliotecase e seja cada vez mais pratico de fazer estes processos dentro de uma biblioteca.
+
+  No momento projeto encontrasse em um novo desenvolvimento para sua parte de front-end em alguns dias estara disponivel o front 100% funcional.
 </p>
 <div>
 
