@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Biblioteca</name>
+	<name>Biblioteca_vrs2</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -16,7 +16,11 @@
 	</natures>
 	<filteredResources>
 		<filter>
+<<<<<<< HEAD
 			<id>1724194104800</id>
+=======
+			<id>1709562553784</id>
+>>>>>>> 368718c369f3db21fd76b2b6d83b7614e46e3a11
 			<name></name>
 			<type>30</type>
 			<matcher>
