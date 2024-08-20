@@ -9,13 +9,15 @@ public class Livro {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idLivro;
+	private String codigo;
 	private String titulo;
 	private String genero;
 	private String autor;
 	private String editora;
 	private Date lancamento;
 	private boolean emprestado;
-	
+	private boolean inativo;
+
 	public Livro(boolean emprestado) {
 		this.emprestado = emprestado;
 	}
@@ -29,6 +31,12 @@ public class Livro {
 	}
 	public void setIdLivro(int idLivro) {
 		this.idLivro = idLivro;
+	}
+	public String getCodigo() {
+		return codigo;
+	}
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 	public String getTitulo() {
 		return titulo;
@@ -65,6 +73,12 @@ public class Livro {
 	}
 	public void setEmprestado(boolean emprestado) {
 		this.emprestado = emprestado;
+	}
+	public boolean getInativo() {
+		return inativo;
+	}
+	public void setInativo(boolean inativo) {
+		this.inativo = inativo;
 	}
 }
 
