@@ -80,5 +80,10 @@ public class Livro {
 	public void setInativo(boolean inativo) {
 		this.inativo = inativo;
 	}
+	
+	@Override
+    public String toString() {
+        return this.titulo;
+    }
 }
 

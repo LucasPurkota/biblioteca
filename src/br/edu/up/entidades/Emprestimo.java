@@ -11,7 +11,7 @@ public class Emprestimo {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idEmprestimo;
-	private int codigoEmprestimo;
+	private String codigoEmprestimo;
 	private Date dataEmprestimo;
 	@OneToOne
 	private Cliente cliente;
@@ -35,10 +35,10 @@ public class Emprestimo {
 	public void setIdEmprestimo(int idEmprestimo) {
 		this.idEmprestimo = idEmprestimo;
 	}
-	public int getCodigoEmprestimo() {
+	public String getCodigoEmprestimo() {
 		return codigoEmprestimo;
 	}
-	public void setCodigoEmprestimo(int codigoEmprestimo) {
+	public void setCodigoEmprestimo(String codigoEmprestimo) {
 		this.codigoEmprestimo = codigoEmprestimo;
 	}
 	public Date getDataEmprestimo() {

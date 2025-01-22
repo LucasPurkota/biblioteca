@@ -67,7 +67,6 @@ public class LivroPersistencia {
 		}
 		return null;
 	}
-<<<<<<< HEAD
 	
 	public static Livro procurarPorCodigo(Livro livro) {
 		EntityManager manager = EntityManagerFactory.getInstance();
@@ -79,6 +78,11 @@ public class LivroPersistencia {
 		}
 		return null;
 	}
-=======
->>>>>>> 368718c369f3db21fd76b2b6d83b7614e46e3a11
+	
+	public static List<Livro> listarLivro() {
+		EntityManager manager = EntityManagerFactory.getInstance();
+		Query consulta = manager.createQuery("from Livro");
+		List<Livro> livros = consulta.getResultList();
+		return livros;	
+	}
 }
