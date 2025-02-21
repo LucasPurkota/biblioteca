@@ -81,7 +81,7 @@ public class LivroPersistencia {
 	
 	public static List<Livro> listarLivro() {
 		EntityManager manager = EntityManagerFactory.getInstance();
-		Query consulta = manager.createQuery("from Livro");
+		Query consulta = manager.createQuery("from Livro where emprestado = 0 and inativo = 0");
 		List<Livro> livros = consulta.getResultList();
 		return livros;	
 	}

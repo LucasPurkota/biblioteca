@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class ConverteData {
 	public static Date converterData(String data) {
-		SimpleDateFormat f = new SimpleDateFormat("dd/mm/yyyy");
+		SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
 		try {
 			Date dataConvert;
 			dataConvert = (Date) f.parse(data);
@@ -17,9 +17,13 @@ public class ConverteData {
 	}
 
 	public static String converteDataString(Date data) {
-		SimpleDateFormat f = new SimpleDateFormat("dd/mm/yyyy");
+		SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+		try {
 			String dataConvert;
 			dataConvert = (String) f.format(data);
 			return dataConvert;
+		}catch(Exception e){
+			return null;
+		}
 	}
 }

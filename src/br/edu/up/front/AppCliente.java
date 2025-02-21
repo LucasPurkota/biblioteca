@@ -12,6 +12,8 @@ import br.edu.up.entidades.Endereco;
 import br.edu.up.negocio.ConverteData;
 import br.edu.up.negocio.ValidaCPF;
 import br.edu.up.presistencia.ClientePersistencia;
+import br.edu.up.presistencia.EnderecoPersistencia;
+import br.edu.up.presistencia.LivroPersistencia;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -20,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.Toolkit;
+import javax.swing.JEditorPane;
 
 public class AppCliente {
 
@@ -32,7 +35,6 @@ public class AppCliente {
 	private JTextField txtComplemento;
 	private JTextField txtNumero;
 	private JTextField txtCep;
-	private JTextField txtEndereco;
 
 	public AppCliente() {
 		initialize();
@@ -42,7 +44,7 @@ public class AppCliente {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\lucas\\eclipse-workspace\\Biblioteca_vrs2\\src\\assets\\book.png"));
-		frame.setBounds(100, 100, 600, 460);
+		frame.setBounds(100, 100, 600, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setLocationRelativeTo(null);
@@ -136,12 +138,12 @@ public class AppCliente {
 		frame.getContentPane().add(txtCep);
 		txtCep.setColumns(10);
 		
-		txtEndereco = new JTextField();
+		
+		JEditorPane txtEndereco = new JEditorPane();
 		txtEndereco.setFont(new Font("Arial", Font.PLAIN, 15));
 		txtEndereco.setEnabled(false);
-		txtEndereco.setBounds(110, 371, 380, 30);
+		txtEndereco.setBounds(110, 371, 380, 60);
 		frame.getContentPane().add(txtEndereco);
-		txtEndereco.setColumns(10);
 		
 		JButton btnIncluir = new JButton("Incluir");
 		btnIncluir.setFont(new Font("Arial", Font.BOLD, 15));
@@ -149,7 +151,6 @@ public class AppCliente {
 			public void actionPerformed(ActionEvent e) {
 				Date dataNascimento;
 				Endereco endereco = new Endereco();
-				Cliente cliente = new Cliente();
 				cliente.setCpf(txtCpf.getText());
 				if(ValidaCPF.isCPF(cliente.getCpf())) {
 					if(ClientePersistencia.procurarPorCPF(cliente) == null) {
@@ -160,6 +161,7 @@ public class AppCliente {
 							cliente.setDataNascimento(dataNascimento);
 							cliente.setTelefone(txtTelefone.getText());
 							endereco.setCep(txtCep.getText());
+							endereco = EnderecoPersistencia.pequisarPorCEP(endereco);
 							if(endereco != null) {
 								cliente.setEndereco(endereco);
 								cliente.setComplemento(txtComplemento.getText());
@@ -176,7 +178,7 @@ public class AppCliente {
 							JOptionPane.showMessageDialog(null, "Data Invalida!");
 						}
 					}else {
-						JOptionPane.showMessageDialog(null, "Funcionario ja Cadastrado!");
+						JOptionPane.showMessageDialog(null, "Cliente ja Cadastrado!");
 					}
 				}else {
 					JOptionPane.showMessageDialog(null, "CPF Invalido!");
@@ -202,11 +204,11 @@ public class AppCliente {
 		btnFiltrar.setFont(new Font("Arial", Font.BOLD, 15));
 		btnFiltrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Cliente cliente = new Cliente();
 				cliente.setCpf(txtCpf.getText());
 				cliente = ClientePersistencia.procurarPorCPF(cliente);
 				if(cliente != null) {
 					String dataNasc;
+					txtCpf.setText(cliente.getCpf());
 					txtNome.setText(cliente.getNome());
 					txtRg.setText(cliente.getRg());
 					dataNasc = ConverteData.converteDataString(cliente.getDataNascimento());
@@ -216,10 +218,9 @@ public class AppCliente {
 					txtNumero.setText(Integer.toString(cliente.getNumero()));
 					txtCep.setText(cliente.getEndereco().getCep());
 					txtEndereco.setText(cliente.getEndereco().getLogradouro() + " , " + cliente.getEndereco().getBairro() + " , " + 
-					cliente.getEndereco().getCidade());
-					JOptionPane.showMessageDialog(null, "Cliente Localizado!");
+							cliente.getEndereco().getCidade());
 				}
-				else {
+				else { 
 					JOptionPane.showMessageDialog(null, "Cliente não encontrado!");
 				}
 			}
@@ -236,6 +237,36 @@ public class AppCliente {
 		JButton btnEditar = new JButton("Editar");
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Date dataNascimento;
+				Endereco endereco = new Endereco();
+				cliente.setCpf(txtCpf.getText());
+				if(ValidaCPF.isCPF(cliente.getCpf())) {
+					cliente.setRg(txtRg.getText());
+					cliente.setNome(txtNome.getText());
+					dataNascimento = ConverteData.converterData(txtNascimento.getText());
+					if(dataNascimento != null) {
+						cliente.setDataNascimento(dataNascimento);
+						cliente.setTelefone(txtTelefone.getText());
+						endereco.setCep(txtCep.getText());
+						endereco = EnderecoPersistencia.pequisarPorCEP(endereco);
+						if(endereco != null) {
+							cliente.setEndereco(endereco);
+							cliente.setComplemento(txtComplemento.getText());
+							cliente.setNumero(Integer.parseInt(txtNumero.getText()));
+							if(ClientePersistencia.editar(cliente) == true) {
+								JOptionPane.showMessageDialog(null, "Dados Alterados com Sucesso!");
+							}else {									
+								JOptionPane.showMessageDialog(null, "Dados não podem ser alterados no momento!");
+							}
+						}else {
+							JOptionPane.showMessageDialog(null, "Endereço não cadastrado!");
+						}
+					}else {
+						JOptionPane.showMessageDialog(null, "Data Invalida!");
+					}
+				}else {
+					JOptionPane.showMessageDialog(null, "CPF Invalido!");
+				}
 			}
 		});
 		btnEditar.setFont(new Font("Arial", Font.BOLD, 15));
@@ -243,11 +274,36 @@ public class AppCliente {
 		frame.getContentPane().add(btnEditar);
 		
 		JButton btnExcluir = new JButton("Excluir");
+		btnExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int resposta = JOptionPane.showConfirmDialog(null, "Confirmar exlusão?", "Excluir", JOptionPane.YES_NO_OPTION);
+				if (resposta == JOptionPane.YES_OPTION) {
+					if(ClientePersistencia.excluir(cliente)) {
+						JOptionPane.showMessageDialog(null, "Cliente excluido com sucesso!");
+					}else {
+						JOptionPane.showMessageDialog(null, "Impossivel excluir o cliente no momento!");	
+					}
+				}
+			}
+		});
 		btnExcluir.setFont(new Font("Arial", Font.BOLD, 15));
 		btnExcluir.setBounds(240, 75, 100, 30);
 		frame.getContentPane().add(btnExcluir);
 		
 		JButton btnBuscarCEP = new JButton("Buscar");
+		btnBuscarCEP.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Endereco endereco = new Endereco();
+				endereco.setCep(txtCep.getText());
+				endereco = EnderecoPersistencia.pequisarPorCEP(endereco);
+				if (endereco != null) {
+					txtEndereco.setText(endereco.getLogradouro() + " , " + endereco.getBairro() + " , " + 
+							endereco.getCidade());
+				}else {
+					JOptionPane.showMessageDialog(null, "Cep não encontrado!");
+				}
+			}
+		});
 		btnBuscarCEP.setFont(new Font("Arial", Font.BOLD, 15));
 		btnBuscarCEP.setBounds(281, 331, 100, 30);
 		frame.getContentPane().add(btnBuscarCEP);

@@ -9,10 +9,13 @@ import javax.swing.JTextField;
 
 import br.edu.up.entidades.Endereco;
 import br.edu.up.entidades.Funcionario;
+import br.edu.up.presistencia.EnderecoPersistencia;
 import br.edu.up.presistencia.FuncionarioPersistencia;
 import br.edu.up.negocio.*;
 
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
+
 import java.awt.event.ActionListener;
 import java.util.Date;
 import java.awt.event.ActionEvent;
@@ -37,11 +40,12 @@ public class AppFuncionario {
 	public AppFuncionario() {
 		initialize();
 	}
-
+	
+	private Funcionario funcionario = new Funcionario();
 	private void initialize() {
 		frame = new JFrame();
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\lucas\\eclipse-workspace\\Biblioteca_vrs2\\src\\assets\\book.png"));
-		frame.setBounds(100, 100, 600, 460	);
+		frame.setBounds(100, 100, 600, 500 );
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setLocationRelativeTo(null);
@@ -104,23 +108,23 @@ public class AppFuncionario {
 		
 		JLabel lblSenha = new JLabel("Senha");
 		lblSenha.setFont(new Font("Arial", Font.BOLD, 15));
-		lblSenha.setBounds(350, 311, 120, 15);
+		lblSenha.setBounds(110, 311, 120, 15);
 		frame.getContentPane().add(lblSenha);
 		
 		txtSenha = new JTextField();
 		txtSenha.setFont(new Font("Arial", Font.PLAIN, 15));
-		txtSenha.setBounds(350, 331, 140, 30);
+		txtSenha.setBounds(110, 331, 140, 30);
 		frame.getContentPane().add(txtSenha);
 		txtSenha.setColumns(10);
 		
 		JLabel lblCep = new JLabel("CEP");
 		lblCep.setFont(new Font("Arial", Font.BOLD, 15));
-		lblCep.setBounds(110, 311, 45, 15);
+		lblCep.setBounds(260, 311, 45, 15);
 		frame.getContentPane().add(lblCep);
 		
 		txtCep = new JTextField();
 		txtCep.setFont(new Font("Arial", Font.PLAIN, 15));
-		txtCep.setBounds(110, 331, 120, 30);
+		txtCep.setBounds(260, 331, 120, 30);
 		frame.getContentPane().add(txtCep);
 		txtCep.setColumns(10);
 		
@@ -146,13 +150,18 @@ public class AppFuncionario {
 		frame.getContentPane().add(txtNumero);
 		txtNumero.setColumns(10);
 		
+		JEditorPane txtEndereco = new JEditorPane();
+		txtEndereco.setFont(new Font("Arial", Font.PLAIN, 15));
+		txtEndereco.setEnabled(false);
+		txtEndereco.setBounds(110, 371, 380, 60);
+		frame.getContentPane().add(txtEndereco);
+		
 		JButton btnIncluir = new JButton("Incluir");
 		btnIncluir.setFont(new Font("Arial", Font.BOLD, 15));
 		btnIncluir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Date dataNascimento;
 				Endereco endereco = new Endereco();
-				Funcionario funcionario = new Funcionario();
 				funcionario.setCpf(txtCpf.getText());
 				if(ValidaCPF.isCPF(funcionario.getCpf())) {
 					if(FuncionarioPersistencia.procuraPorCPF(funcionario) == null) {
@@ -164,6 +173,7 @@ public class AppFuncionario {
 							funcionario.setTelefone(txtTelefone.getText());
 							funcionario.setSenha(txtSenha.getText());
 							endereco.setCep(txtCep.getText());
+							endereco = EnderecoPersistencia.pequisarPorCEP(endereco);
 							if(endereco != null) {
 								funcionario.setEndereco(endereco);
 								funcionario.setComplemento(txtComplemento.getText());
@@ -202,20 +212,90 @@ public class AppFuncionario {
 		btnVoltar.setBounds(460, 75, 100, 30);
 		frame.getContentPane().add(btnVoltar);
 		
-		JButton btnVoltar_1 = new JButton("Voltar");
-		btnVoltar_1.setFont(new Font("Arial", Font.BOLD, 15));
-		btnVoltar_1.setBounds(350, 75, 100, 30);
-		frame.getContentPane().add(btnVoltar_1);
+		JButton btnFiltrar = new JButton("Filtrar");
+		btnFiltrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				funcionario.setCpf(txtCpf.getText());
+				funcionario = FuncionarioPersistencia.procuraPorCPF(funcionario);
+				if(funcionario != null) {
+					String dataNasc;
+					txtCpf.setText(funcionario.getCpf());
+					txtRg.setText(funcionario.getRg());
+					dataNasc = ConverteData.converteDataString(funcionario.getDataNascimento());
+					txtNascimento.setText(dataNasc);
+					txtNome.setText(funcionario.getNome());
+					txtTelefone.setText(funcionario.getTelefone());
+					txtComplemento.setText(funcionario.getComplemento());
+					txtNumero.setText(Integer.toString(funcionario.getNumero()));
+					txtSenha.setText(funcionario.getSenha());
+					txtCep.setText(funcionario.getEndereco().getCep());
+					txtEndereco.setText(funcionario.getEndereco().getLogradouro() + " , " + funcionario.getEndereco().getBairro() + " , " + 
+							funcionario.getEndereco().getCidade());
+				}else {
+					JOptionPane.showMessageDialog(null, "Funcionario não encontrado!");
+				}
+			}
+		});
+		btnFiltrar.setFont(new Font("Arial", Font.BOLD, 15));
+		btnFiltrar.setBounds(350, 75, 100, 30);
+		frame.getContentPane().add(btnFiltrar);
 		
-		JButton btnVoltar_2 = new JButton("Voltar");
-		btnVoltar_2.setFont(new Font("Arial", Font.BOLD, 15));
-		btnVoltar_2.setBounds(130, 75, 100, 30);
-		frame.getContentPane().add(btnVoltar_2);
+		JButton btnEditar = new JButton("Editar");
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Date dataNascimento;
+				Endereco endereco = new Endereco();
+				funcionario.setCpf(txtCpf.getText());
+				if(ValidaCPF.isCPF(funcionario.getCpf())) {
+					funcionario.setRg(txtRg.getText());
+					funcionario.setNome(txtNome.getText());
+					dataNascimento = ConverteData.converterData(txtNascimento.getText());
+					if(dataNascimento != null) {
+						funcionario.setDataNascimento(dataNascimento);
+						funcionario.setTelefone(txtTelefone.getText());
+						funcionario.setSenha(txtSenha.getText());
+						endereco.setCep(txtCep.getText());
+						endereco = EnderecoPersistencia.pequisarPorCEP(endereco);
+						if(endereco != null) {
+							funcionario.setEndereco(endereco);
+							funcionario.setComplemento(txtComplemento.getText());
+							funcionario.setNumero(Integer.parseInt(txtNumero.getText()));
+							if(FuncionarioPersistencia.editar(funcionario) == true) {
+								JOptionPane.showMessageDialog(null, "Dados Inseridos com Sucesso!");
+							}else {									
+								JOptionPane.showMessageDialog(null, "Dados não podem ser inseridos no momento!");
+							}
+						}else {
+							JOptionPane.showMessageDialog(null, "Endereço não cadastrado!");
+						}
+					}else {
+						JOptionPane.showMessageDialog(null, "Data Invalida!");
+					}
+				}else {
+					JOptionPane.showMessageDialog(null, "CPF Invalido!");
+				}
+			}
+		});
+		btnEditar.setFont(new Font("Arial", Font.BOLD, 15));
+		btnEditar.setBounds(130, 75, 100, 30);
+		frame.getContentPane().add(btnEditar);
 		
-		JButton btnVoltar_3 = new JButton("Voltar");
-		btnVoltar_3.setFont(new Font("Arial", Font.BOLD, 15));
-		btnVoltar_3.setBounds(240, 75, 100, 30);
-		frame.getContentPane().add(btnVoltar_3);
+		JButton btnExcluir = new JButton("Excluir");
+		btnExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int resposta = JOptionPane.showConfirmDialog(null, "Confirmar exlusão?", "Excluir", JOptionPane.YES_NO_OPTION);
+				if (resposta == JOptionPane.YES_OPTION) {
+					if(FuncionarioPersistencia.excluir(funcionario)) {
+						JOptionPane.showMessageDialog(null, "Funcionario excluido com sucesso!");
+					}else {
+						JOptionPane.showMessageDialog(null, "Impossivel excluir o Funcionario no momento!");	
+					}
+				}
+			}
+		});
+		btnExcluir.setFont(new Font("Arial", Font.BOLD, 15));
+		btnExcluir.setBounds(240, 75, 100, 30);
+		frame.getContentPane().add(btnExcluir);
 		
 		JLabel lblCadastaroFuncionario = new JLabel("Cadastro Funcionario");
 		lblCadastaroFuncionario.setHorizontalAlignment(SwingConstants.CENTER);
@@ -224,15 +304,21 @@ public class AppFuncionario {
 		frame.getContentPane().add(lblCadastaroFuncionario);
 		
 		JButton btnBuscarCEP = new JButton("Buscar");
+		btnBuscarCEP.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Endereco endereco = new Endereco();
+				endereco.setCep(txtCep.getText());
+				endereco = EnderecoPersistencia.pequisarPorCEP(endereco);
+				if (endereco != null) {
+					txtEndereco.setText(endereco.getLogradouro() + " , " + endereco.getBairro() + " , " + 
+							endereco.getCidade());
+				}else {
+					JOptionPane.showMessageDialog(null, "Cep não encontrado!");
+				}
+			}
+		});
 		btnBuscarCEP.setFont(new Font("Arial", Font.BOLD, 15));
-		btnBuscarCEP.setBounds(240, 331, 100, 30);
+		btnBuscarCEP.setBounds(390, 331, 100, 30);
 		frame.getContentPane().add(btnBuscarCEP);
-		
-		textField = new JTextField();
-		textField.setEnabled(false);
-		textField.setFont(new Font("Arial", Font.PLAIN, 15));
-		textField.setColumns(10);
-		textField.setBounds(110, 371, 380, 30);
-		frame.getContentPane().add(textField);
 	}
 }

@@ -85,18 +85,14 @@ public class Login {
 				Funcionario funcionario = new Funcionario();
 				funcionario.setCpf(txtLogin.getText());
 				funcionario = FuncionarioPersistencia.procuraPorCPF(funcionario);
-				if(funcionario != null) {
-					senha = new String(passwordField.getPassword());
-					if(senha.equals(funcionario.getSenha())) {
+				senha = new String(passwordField.getPassword());
+				if((funcionario != null) && (senha.equals(funcionario.getSenha()))) {
 						JOptionPane.showMessageDialog(null, "Login efetuado com sucesso!");
 						MenuPrincipal menuPrincipal = new MenuPrincipal();
 						menuPrincipal.frame.setVisible(true);
 						frame.setVisible(false);
-					}else {
-						JOptionPane.showMessageDialog(null, "Senha Invalida!");
-					}
 				}else {
-					JOptionPane.showMessageDialog(null, "CPF Invalido!");
+					JOptionPane.showMessageDialog(null, "CPF ou Senha invalidos!");
 				}
 			}
 		});

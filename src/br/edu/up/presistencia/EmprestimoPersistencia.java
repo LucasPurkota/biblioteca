@@ -58,7 +58,7 @@ public class EmprestimoPersistencia {
 	
 	public static Emprestimo procurarPorID(Emprestimo emprestimo) {
 		EntityManager manager = EntityManagerFactory.getInstance();
-		Query consulta = manager.createQuery("from Emprestimo where codigoEmprestimo = :param");
+		Query consulta = manager.createQuery("from Emprestimo where idEmprestimo = :param");
 		consulta.setParameter("param", emprestimo.getIdEmprestimo());
 		List<Emprestimo> emprestimos = consulta.getResultList();
 		if(!emprestimos.isEmpty()) {

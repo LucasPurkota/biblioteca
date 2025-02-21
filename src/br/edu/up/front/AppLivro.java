@@ -163,32 +163,6 @@ public class AppLivro {
 				frame.setVisible(false);
 			}
 		});
-		JButton btnFiltrar = new JButton("Filtrar");
-		btnFiltrar.setBounds(350, 75, 100, 30);
-		btnFiltrar.setFont(new Font("Arial", Font.BOLD, 15));
-		btnFiltrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				livro.setCodigo(txtCodigo.getText());
-				livro = LivroPersistencia.procurarPorCodigo(livro);
-				if (livro != null) {
-					txtTitulo.setText(livro.getTitulo());
-					txtGenero.setText(livro.getGenero());
-					txtEditora.setText(livro.getEditora());
-					txtAutor.setText(livro.getAutor());
-					txtLancamento.setText(ConverteData.converteDataString(livro.getLancamento()));
-					if(livro.getInativo() == true) {
-						txtStatus.setText("Inativo");
-						chckbxInativarItem.setSelected(true);
-					}else if(livro.getEmprestado() == true) {
-						txtStatus.setText("Emprestado");
-					}else {
-						txtStatus.setText("Em estoque");
-					}
-				}else {
-					JOptionPane.showMessageDialog(null, "Livro encotrado!");
-				}			
-			}
-		});
 		
 		JButton btnEditar = new JButton("Editar");
 		btnEditar.setBounds(130, 75, 100, 30);
@@ -223,6 +197,36 @@ public class AppLivro {
 						JOptionPane.showMessageDialog(null, "Impossivel excluir o livro no momento!");	
 					}
 				}
+			}
+		});
+		
+		JButton btnFiltrar = new JButton("Filtrar");
+		btnFiltrar.setBounds(350, 75, 100, 30);
+		btnFiltrar.setFont(new Font("Arial", Font.BOLD, 15));
+		btnFiltrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				livro.setCodigo(txtCodigo.getText());
+				livro = LivroPersistencia.procurarPorCodigo(livro);
+				if (livro != null) {
+					txtTitulo.setText(livro.getTitulo());
+					txtGenero.setText(livro.getGenero());
+					txtEditora.setText(livro.getEditora());
+					txtAutor.setText(livro.getAutor());
+					txtLancamento.setText(ConverteData.converteDataString(livro.getLancamento()));
+					if(livro.getInativo()) {
+						txtStatus.setText("Inativo");
+						chckbxInativarItem.setSelected(true);
+						btnExcluir.setEnabled(false);
+					}else if(livro.getEmprestado()) {
+						txtStatus.setText("Emprestado");
+						btnExcluir.setEnabled(true);
+					}else {
+						txtStatus.setText("Em estoque");
+						btnExcluir.setEnabled(true);
+					}
+				}else {
+					JOptionPane.showMessageDialog(null, "Livro não encotrado!");
+				}			
 			}
 		});
 		

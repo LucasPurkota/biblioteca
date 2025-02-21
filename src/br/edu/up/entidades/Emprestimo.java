@@ -17,8 +17,8 @@ public class Emprestimo {
 	private Cliente cliente;
 	@OneToOne
 	private Funcionario funcionario;
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<ItemEmprestimo> itens = new ArrayList<ItemEmprestimo>();
+//	@OneToMany(cascade = CascadeType.ALL)
+//	private List<ItemEmprestimo> itens = new ArrayList<ItemEmprestimo>();
 	private Date dataDevolucao;
 	private boolean devolvido;
 	
@@ -59,12 +59,12 @@ public class Emprestimo {
 	public void setFuncionario(Funcionario funcionario) {
 		this.funcionario = funcionario;
 	}
-	public List<ItemEmprestimo> getItens() {
-		return itens;
-	}
-	public void setItens(List<ItemEmprestimo> itens) {
-		this.itens = itens;
-	}
+//	public List<ItemEmprestimo> getItens() {
+//		return itens;
+//	}
+//	public void setItens(List<ItemEmprestimo> itens) {
+//		this.itens = itens;
+//	}
 	public Date getDataDevolucao() {
 		return dataDevolucao;
 	}
